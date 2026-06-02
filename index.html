@@ -11,24 +11,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
 
 /* ── 로그인 ── */
-#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#1F4E79 0%,#2E75B6 100%)}
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#064E3B 0%,#00A862 100%)}
 .login-box{background:#fff;border-radius:16px;padding:40px 36px;width:360px;box-shadow:0 20px 60px rgba(0,0,0,.18)}
 .login-logo{text-align:center;margin-bottom:28px}
-.login-logo-icon{width:52px;height:52px;background:#1F4E79;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px}
+.login-logo-icon{width:52px;height:52px;background:#064E3B;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px}
 .login-logo-icon i{font-size:26px;color:#fff}
 .login-logo h1{font-size:18px;font-weight:600;color:#1a1a2e}
 .login-logo p{font-size:12px;color:#888;margin-top:4px}
 .login-field{margin-bottom:14px}
 .login-field label{display:block;font-size:12px;font-weight:500;color:#555;margin-bottom:6px}
 .login-field input{width:100%;padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;outline:none;transition:border .2s}
-.login-field input:focus{border-color:#2E75B6;box-shadow:0 0 0 3px rgba(46,117,182,.12)}
-.login-btn{width:100%;padding:11px;background:#1F4E79;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;margin-top:6px;transition:background .2s}
-.login-btn:hover{background:#2E75B6}
+.login-field input:focus{border-color:#00A862;box-shadow:0 0 0 3px rgba(0,168,98,.12)}
+.login-btn{width:100%;padding:11px;background:#064E3B;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;margin-top:6px;transition:background .2s}
+.login-btn:hover{background:#00A862}
 .login-err{color:#c0392b;font-size:12px;text-align:center;margin-top:10px;display:none}
 
 /* ── 앱 셸 ── */
 #app{display:none;flex-direction:column;height:100vh}
-.topbar{height:52px;background:#1F4E79;display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0}
+.topbar{height:52px;background:#064E3B;display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0}
 .topbar-logo{color:#fff;font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px}
 .topbar-logo i{font-size:20px}
 .topbar-badge{background:rgba(255,255,255,.15);color:#fff;font-size:11px;padding:2px 8px;border-radius:4px;margin-left:4px}
@@ -44,7 +44,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .sidebar-title{font-size:10px;font-weight:600;color:#aaa;letter-spacing:.08em;text-transform:uppercase;padding:0 16px 6px}
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;font-size:13px;cursor:pointer;color:#555;border-left:3px solid transparent;transition:all .15s}
 .nav-item:hover{background:#f4f6f9;color:#1a1a2e}
-.nav-item.active{background:#EBF3FB;color:#1F4E79;border-left:3px solid #2E75B6;font-weight:500}
+.nav-item.active{background:#d1fae5;color:#064E3B;border-left:3px solid #00A862;font-weight:500}
 .nav-item i{font-size:16px}
 .main{flex:1;overflow-y:auto;padding:24px;background:#f4f6f9}
 .page{display:none}
@@ -70,12 +70,12 @@ tr:hover td{background:#fafbff}
 .badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:500;white-space:nowrap}
 .bg{background:#e8f5e9;color:#2e7d32}.br{background:#ffebee;color:#c62828}
 .ba{background:#fff8e1;color:#e65100}.bgr{background:#f1f3f5;color:#555}
-.bb{background:#e3f2fd;color:#1565c0}
+.bb{background:#d1fae5;color:#065f46}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid #ddd;background:#fff;color:#333;transition:all .15s}
 .btn:hover{background:#f4f6f9}
 .btn:disabled{opacity:.5;cursor:not-allowed}
-.btn-primary{background:#1F4E79;color:#fff;border-color:#1F4E79}
-.btn-primary:hover{background:#2E75B6}
+.btn-primary{background:#064E3B;color:#fff;border-color:#064E3B}
+.btn-primary:hover{background:#00A862}
 .btn-sm{padding:4px 10px;font-size:12px}
 .btn-danger{color:#c62828;border-color:#ffcdd2}
 .btn-danger:hover{background:#ffebee}
@@ -85,14 +85,14 @@ tr:hover td{background:#fafbff}
 .toggle input{opacity:0;width:0;height:0}
 .sl{position:absolute;cursor:pointer;inset:0;background:#ccc;border-radius:20px;transition:.2s}
 .sl:before{content:'';position:absolute;height:14px;width:14px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s}
-input:checked+.sl{background:#2E75B6}
+input:checked+.sl{background:#00A862}
 input:checked+.sl:before{transform:translateX(16px)}
 .sep{height:1px;background:#f0f2f7;margin:14px 0}
 .tag{display:inline-block;padding:1px 6px;border-radius:4px;font-size:11px;background:#f1f3f5;color:#666;margin-left:4px}
 .form-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
 .form-label{font-size:13px;color:#666;width:110px;flex-shrink:0}
 .form-row input,.form-row select{flex:1;padding:8px 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;outline:none;transition:border .2s}
-.form-row input:focus,.form-row select:focus{border-color:#2E75B6}
+.form-row input:focus,.form-row select:focus{border-color:#00A862}
 .pb{height:6px;background:#f0f2f7;border-radius:3px;overflow:hidden;width:80px}
 .pf{height:100%;border-radius:3px}
 
@@ -110,9 +110,9 @@ input:checked+.sl:before{transform:translateX(16px)}
 .ep-name{font-weight:500;color:#1a1a2e}
 .ep-url{font-family:'SF Mono',monospace;font-size:11px;color:#666}
 .ep-method{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;font-family:monospace}
-.m-post{background:#e3f2fd;color:#1565c0}.m-get{background:#e8f5e9;color:#2e7d32}
+.m-post{background:#d1fae5;color:#065f46}.m-get{background:#e8f5e9;color:#2e7d32}
 .add-ep-row{display:flex;align-items:center;gap:8px;padding:8px 12px;border-top:1px dashed #e8eaf0;cursor:pointer;color:#888;font-size:12px;transition:background .15s}
-.add-ep-row:hover{background:#f4f6f9;color:#1F4E79}
+.add-ep-row:hover{background:#f4f6f9;color:#064E3B}
 .action-row{display:flex;gap:8px;margin-top:12px;justify-content:flex-end}
 
 /* ── 스크래핑 에러 ── */
@@ -566,7 +566,7 @@ input:checked+.sl:before{transform:translateX(16px)}
 <!-- ── 운영사 상세 모달 ── -->
 <div class="modal-backdrop" id="modal-op-detail">
   <div class="modal" style="width:520px">
-    <h3 style="display:flex;align-items:center;gap:8px"><i class="ti ti-building" style="color:#1F4E79"></i><span id="od-title">운영사 상세</span></h3>
+    <h3 style="display:flex;align-items:center;gap:8px"><i class="ti ti-building" style="color:#064E3B"></i><span id="od-title">운영사 상세</span></h3>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 20px;margin-bottom:18px">
       <div class="field"><div class="field-label">운영사명</div><div class="field-value" id="od-name">—</div></div>
       <div class="field"><div class="field-label">Operator ID</div><div class="field-value" id="od-id">—</div></div>
@@ -680,7 +680,7 @@ function runBatch(btn,name){
     const t=`오늘 ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')} (수동)`;
     const row=document.createElement('div');
     row.className='log-row';
-    row.innerHTML=`<span class="log-time" style="color:#1565c0">${t}</span><span class="log-msg">${name} 강제 실행 완료</span><span class="badge bg" style="flex-shrink:0">성공</span>`;
+    row.innerHTML=`<span class="log-time" style="color:#065f46">${t}</span><span class="log-msg">${name} 강제 실행 완료</span><span class="badge bg" style="flex-shrink:0">성공</span>`;
     log.prepend(row);
   },1500);
 }
