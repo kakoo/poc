@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>현재 요금제 – 케이스별 UI</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans KR', sans-serif;
+      background: #f5f6f8;
+      color: #1a1a2e;
+      padding: 40px 24px;
+    }
+
+    h1 {
+      font-size: 13px;
+      font-weight: 700;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 32px;
+    }
+
+    /* ── Section label ── */
+    .case-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .case-label span {
+      background: #e8eaff;
+      color: #4f46e5;
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-size: 11px;
+    }
+    .case-wrap { margin-bottom: 48px; }
+
+    /* ── Card shell (matches screenshot) ── */
+    .plan-card {
+      background: #fff;
+      border: 1px solid #e8eaed;
+      border-radius: 12px;
+      padding: 24px 28px;
+      max-width: 860px;
+    }
+
+    .plan-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .plan-meta-label {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 6px;
+    }
+
+    .plan-name-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .plan-name {
+      font-size: 22px;
+      font-weight: 800;
+      color: #111;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 11.5px;
+      font-weight: 700;
+      gap: 4px;
+    }
+    .badge-trial   { background: #fff4e5; color: #e67e00; border: 1px solid #ffd591; }
+    .badge-promo   { background: #fce7ff; color: #9333ea; border: 1px solid #e9b8ff; }
+    .badge-active  { background: #e6f9f0; color: #15803d; border: 1px solid #86efac; }
+    .badge-warning { background: #fff1f0; color: #c53030; border: 1px solid #fca5a5; }
+
+    /* ── Action buttons ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: background .15s, transform .1s;
+      white-space: nowrap;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn-outline {
+      background: #fff;
+      color: #374151;
+      border: 1.5px solid #d1d5db;
+    }
+    .btn-outline:hover { background: #f9fafb; }
+    .btn-primary {
+      background: #4f46e5;
+      color: #fff;
+    }
+    .btn-primary:hover { background: #4338ca; }
+    .btn-danger {
+      background: #fff1f0;
+      color: #c53030;
+      border: 1.5px solid #fca5a5;
+    }
+    .btn-danger:hover { background: #ffe4e4; }
+    .btn-success {
+      background: #15803d;
+      color: #fff;
+    }
+    .btn-success:hover { background: #166534; }
+
+    .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    /* ── Info rows under name ── */
+    .plan-info {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .plan-info-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #555;
+    }
+    .plan-info-row svg { flex-shrink: 0; }
+    .plan-info-row strong { color: #111; }
+    .plan-info-row.warn { color: #c53030; }
+    .plan-info-row.warn strong { color: #c53030; }
+
+    /* ── Notice banner ── */
+    .notice {
+      margin-top: 16px;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 13px;
+      line-height: 1.6;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .notice svg { flex-shrink: 0; margin-top: 1px; }
+    .notice-blue   { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .notice-yellow { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+    .notice-red    { background: #fff1f0; color: #9b1c1c; border: 1px solid #fca5a5; }
+    .notice-green  { background: #f0fdf4; color: #14532d; border: 1px solid #86efac; }
+
+    /* ── Divider ── */
+    .divider {
+      border: none;
+      border-top: 1px solid #f0f1f3;
+      margin: 18px 0;
+    }
+
+    /* ── Next billing / card row ── */
+    .detail-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .detail-item .di-label { font-size: 11.5px; color: #999; }
+    .detail-item .di-value { font-size: 14px; font-weight: 700; color: #111; }
+    .detail-item .di-value.muted { color: #aaa; font-weight: 400; }
+
+    /* countdown chip */
+    .countdown-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #fff4e5;
+      color: #c05621;
+      border: 1px solid #f6ad55;
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* progress bar (days remaining) */
+    .progress-wrap { margin-top: 14px; }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      color: #aaa;
+      margin-bottom: 5px;
+    }
+    .progress-track {
+      height: 6px;
+      background: #f0f1f3;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width .3s;
+    }
+    .fill-green  { background: #22c55e; }
+    .fill-yellow { background: #f59e0b; }
+    .fill-red    { background: #ef4444; }
+
+    /* ── Refund link ── */
+    .refund-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: #aaa;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      transition: color .15s;
+    }
+    .refund-link:hover { color: #6b7280; }
+
+    /* ── Refund modal overlay ── */
+    .r-overlay {
+      position: fixed; inset: 0;
+      background: rgba(15,15,25,.45);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px; z-index: 200;
+      opacity: 0; pointer-events: none;
+      transition: opacity .18s;
+    }
+    .r-overlay.show { opacity: 1; pointer-events: all; }
+    .r-modal {
+      background: #fff;
+      border-radius: 16px;
+      width: 100%; max-width: 440px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.18);
+      overflow: hidden;
+      transform: translateY(10px) scale(.98);
+      transition: transform .2s cubic-bezier(.34,1.56,.64,1);
+    }
+    .r-overlay.show .r-modal { transform: translateY(0) scale(1); }
+
+    .r-header {
+      padding: 22px 24px 0;
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .r-title { font-size: 17px; font-weight: 800; color: #111; margin-bottom: 6px; }
+    .r-desc  { font-size: 13px; color: #777; line-height: 1.6; }
+
+    .r-close {
+      width: 28px; height: 28px; border: none; background: none;
+      cursor: pointer; color: #bbb; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s;
+    }
+    .r-close:hover { background: #f3f4f6; color: #555; }
+
+    .r-body { padding: 16px 24px 24px; display: flex; flex-direction: column; gap: 14px; }
+
+    .r-field label {
+      display: block; font-size: 12px; font-weight: 700;
+      color: #374151; margin-bottom: 5px;
+    }
+    .r-field label em { color: #e53e3e; font-style: normal; }
+    .r-field select, .r-field textarea {
+      width: 100%; border: 1.5px solid #e5e7eb;
+      border-radius: 8px; padding: 10px 12px;
+      font-size: 13px; color: #111;
+      font-family: inherit;
+      transition: border-color .15s;
+      outline: none;
+      background: #fff;
+    }
+    .r-field select:focus, .r-field textarea:focus { border-color: #4f46e5; }
+    .r-field textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+    .r-char { text-align: right; font-size: 11px; color: #ccc; margin-top: 3px; }
+
+    .r-notice {
+      background: #f8f9ff; border: 1px solid #e0e4ff;
+      border-radius: 8px; padding: 11px 14px;
+      font-size: 12.5px; color: #4338ca; line-height: 1.6;
+      display: flex; gap: 8px; align-items: flex-start;
+    }
+    .r-notice svg { flex-shrink: 0; margin-top: 1px; }
+
+    .r-actions { display: flex; flex-direction: column; gap: 8px; }
+    .r-btn {
+      width: 100%; padding: 12px; border: none; border-radius: 9px;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      transition: background .15s, transform .1s;
+    }
+    .r-btn:active { transform: scale(.98); }
+    .r-btn-primary { background: #4f46e5; color: #fff; }
+    .r-btn-primary:hover { background: #4338ca; }
+    .r-btn-primary:disabled { background: #c7c8d4; color: #888; cursor: not-allowed; }
+    .r-btn-ghost { background: transparent; color: #aaa; font-weight: 500; font-size: 13px; }
+    .r-btn-ghost:hover { color: #555; }
+
+    /* done screen */
+    .r-done { display: none; padding: 32px 24px; text-align: center; }
+    .r-done-icon {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: #f0fdf4; margin: 0 auto 16px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .r-done-title { font-size: 17px; font-weight: 800; color: #111; margin-bottom: 8px; }
+    .r-done-desc  { font-size: 13px; color: #777; line-height: 1.65; }
+    .r-done-desc strong { color: #111; }
+  </style>
+</head>
+<body>
+
+<h1>현재 요금제 영역 — 케이스별 UI</h1>
+
+<!-- ══════════════════════════════════════════
+     CASE 1 : 카드 미등록 + 무료체험/프로모션 중
+════════════════════════════════════════════ -->
+<div class="case-wrap">
+  <div class="case-label">
+    <span>Case 1</span>
+    카드 미등록 · Premium 무료 체험 / 프로모션 중
+  </div>
+
+  <div class="plan-card">
+    <div class="plan-card-top">
+      <div>
+        <div class="plan-meta-label">현재 요금제</div>
+        <div class="plan-name-row">
+          <span class="plan-name">Premium</span>
+          <span class="badge badge-trial">무료 체험</span>
+          <span class="badge badge-promo">프로모션</span>
+        </div>
+        <div class="plan-info">
+          <div class="plan-info-row">
+            <!-- calendar icon -->
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            체험 종료: <strong>2026-07-01</strong>
+            <span class="countdown-chip">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              26일 남음
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-outline">요금제 변경</button>
+      </div>
+    </div>
+
+    <!-- Notice: 카드 미등록 경고 -->
+    <div class="notice notice-yellow" style="margin-top:16px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <div>
+        등록된 결제 수단이 없습니다. 체험 종료 후 서비스를 계속 이용하려면 카드를 등록하세요.
+        만료 후 카드가 없으면 <strong>자동으로 Free 요금제로 전환</strong>됩니다.
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="detail-row">
+      <div class="detail-item">
+        <span class="di-label">등록된 결제 수단</span>
+        <span class="di-value muted">없음</span>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          카드 등록하기
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CASE 2 : 구독 해지 완료 · 잔여 이용기간 남음
+════════════════════════════════════════════ -->
+<div class="case-wrap">
+  <div class="case-label">
+    <span>Case 2</span>
+    구독 해지 완료 · 잔여 이용기간 남음
+  </div>
+
+  <div class="plan-card">
+    <div class="plan-card-top">
+      <div>
+        <div class="plan-meta-label">현재 요금제</div>
+        <div class="plan-name-row">
+          <span class="plan-name">Premium</span>
+          <span class="badge badge-warning">구독 해지됨</span>
+        </div>
+        <div class="plan-info">
+          <div class="plan-info-row warn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            액세스 종료일: <strong>2026-07-01</strong>
+            <span class="countdown-chip" style="background:#fff1f0;color:#c53030;border-color:#fca5a5;">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              26일 남음
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-success">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          지금 요금제 계속 유지
+        </button>
+        <button class="btn btn-outline">요금제 변경</button>
+      </div>
+    </div>
+
+    <!-- Notice: 해지 후 안내 -->
+    <div class="notice notice-red" style="margin-top:16px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div>
+        구독이 해지되었습니다. <strong>2026-07-01</strong>까지 Premium 기능을 계속 이용하실 수 있으며,
+        이후 자동으로 <strong>Free 요금제로 전환</strong>됩니다.
+        지금 다시 구독을 시작하면 끊김 없이 이용하실 수 있습니다.
+      </div>
+    </div>
+
+    <!-- Days remaining progress -->
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>이용 가능 기간</span>
+        <span>26일 / 30일 남음</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill fill-yellow" style="width:87%;"></div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="detail-row">
+      <div class="detail-item">
+        <span class="di-label">자동 갱신</span>
+        <span class="di-value" style="color:#c53030;">해지됨</span>
+      </div>
+      <div class="detail-item">
+        <span class="di-label">등록된 결제 수단</span>
+        <span class="di-value">Visa •••• 4242</span>
+      </div>
+      <div class="detail-item">
+        <span class="di-label">다음 청구</span>
+        <span class="di-value muted">없음 (갱신 안 됨)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CASE 3 : 유료 구독 정상 이용 중
+════════════════════════════════════════════ -->
+<div class="case-wrap">
+  <div class="case-label">
+    <span>Case 3</span>
+    유료 구독 정상 이용 중 (다음 결제일 표기)
+  </div>
+
+  <div class="plan-card">
+    <div class="plan-card-top">
+      <div>
+        <div class="plan-meta-label">현재 요금제</div>
+        <div class="plan-name-row">
+          <span class="plan-name">Premium</span>
+          <span class="badge badge-active">구독 중</span>
+        </div>
+        <div class="plan-info">
+          <div class="plan-info-row">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            다음 결제일: <strong>2026-07-04</strong>
+            <span style="font-size:12px;color:#999;">(29일 후)</span>
+          </div>
+          <div class="plan-info-row">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            결제 금액: <strong>₩49,500 / 월</strong>
+            <span style="font-size:12px;color:#999;">월간 결제</span>
+          </div>
+        </div>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-outline">요금제 변경</button>
+      </div>
+    </div>
+
+    <!-- Notice: 정상 구독 안내 -->
+    <div class="notice notice-green" style="margin-top:16px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      <div>
+        정기결제가 정상적으로 활성화되어 있습니다.
+        <strong>2026-07-04</strong>에 등록된 카드로 <strong>₩49,500</strong>이 자동 결제됩니다.
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="detail-row">
+      <div class="detail-item">
+        <span class="di-label">자동 갱신</span>
+        <span class="di-value" style="color:#15803d;">활성</span>
+      </div>
+      <div class="detail-item">
+        <span class="di-label">등록된 결제 수단</span>
+        <span class="di-value">Visa •••• 4242</span>
+      </div>
+      <div class="detail-item">
+        <span class="di-label">구독 시작일</span>
+        <span class="di-value">2026-06-04</span>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-danger" style="font-size:12px;padding:7px 14px;">구독 해지</button>
+        <button class="btn btn-outline" style="font-size:12px;padding:7px 14px;">카드 변경</button>
+      </div>
+    </div>
+
+    <!-- 환불 요청 링크 -->
+    <div style="margin-top:14px; text-align:right;">
+      <button class="refund-link" onclick="openRefund()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg>
+        환불 요청
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     환불 요청 모달
+════════════════════════════════════════════ -->
+<div id="refund-overlay" class="r-overlay" onclick="closeRefundOnBg(event)">
+  <div class="r-modal">
+
+    <!-- Form screen -->
+    <div id="refund-form">
+      <div class="r-header">
+        <div>
+          <div class="r-title">환불 요청</div>
+          <p class="r-desc">환불 사유를 작성해 주시면 담당자가 검토 후 이메일로 회신드립니다.</p>
+        </div>
+        <button class="r-close" onclick="closeRefund()" aria-label="닫기">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="r-body">
+
+        <div class="r-field">
+          <label for="refund-reason-type">환불 사유 <em>*</em></label>
+          <select id="refund-reason-type" onchange="checkForm()">
+            <option value="">사유를 선택하세요</option>
+            <option>실수로 결제했습니다</option>
+            <option>기대했던 기능이 없습니다</option>
+            <option>서비스를 제대로 이용하지 못했습니다</option>
+            <option>요금이 너무 비쌉니다</option>
+            <option>직접 입력</option>
+          </select>
+        </div>
+
+        <div class="r-field">
+          <label for="refund-detail">상세 내용 <em>*</em></label>
+          <textarea
+            id="refund-detail"
+            placeholder="구체적인 사유를 작성해 주세요. (예: 결제일, 이용 상황 등)"
+            maxlength="500"
+            oninput="updateChar(); checkForm()"
+          ></textarea>
+          <div class="r-char"><span id="char-count">0</span> / 500</div>
+        </div>
+
+        <div class="r-notice">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>
+            접수된 요청은 영업일 기준 <strong>1~3일 내</strong> 가입 이메일(<strong>kakoo47@gmail.com</strong>)로 회신드립니다.
+            환불 여부는 이용 약관 및 결제 정책에 따라 결정됩니다.
+          </span>
+        </div>
+
+        <div class="r-actions">
+          <button id="refund-submit" class="r-btn r-btn-primary" disabled onclick="submitRefund()">
+            환불 요청 제출
+          </button>
+          <button class="r-btn r-btn-ghost" onclick="closeRefund()">취소</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Done screen -->
+    <div id="refund-done" class="r-done">
+      <div class="r-done-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="r-done-title">환불 요청이 접수되었습니다</div>
+      <p class="r-done-desc">
+        담당자가 검토 후<br>
+        <strong>kakoo47@gmail.com</strong>으로<br>
+        영업일 기준 1~3일 내 회신드립니다.
+      </p>
+      <button class="r-btn r-btn-primary" style="margin-top:24px;" onclick="closeRefund()">확인</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function openRefund() {
+    document.getElementById('refund-form').style.display = '';
+    document.getElementById('refund-done').style.display = 'none';
+    document.getElementById('refund-reason-type').value = '';
+    document.getElementById('refund-detail').value = '';
+    document.getElementById('char-count').textContent = '0';
+    document.getElementById('refund-submit').disabled = true;
+    document.getElementById('refund-overlay').classList.add('show');
+  }
+  function closeRefund() {
+    document.getElementById('refund-overlay').classList.remove('show');
+  }
+  function closeRefundOnBg(e) {
+    if (e.target.id === 'refund-overlay') closeRefund();
+  }
+  function updateChar() {
+    const len = document.getElementById('refund-detail').value.length;
+    document.getElementById('char-count').textContent = len;
+  }
+  function checkForm() {
+    const type   = document.getElementById('refund-reason-type').value;
+    const detail = document.getElementById('refund-detail').value.trim();
+    document.getElementById('refund-submit').disabled = !(type && detail.length >= 10);
+  }
+  function submitRefund() {
+    document.getElementById('refund-form').style.display = 'none';
+    document.getElementById('refund-done').style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
